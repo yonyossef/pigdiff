@@ -9,39 +9,25 @@ GAME RULES:
 
 */
 
-var scores, activePlayer, gameOver;
+var activePlayer, gameOver;
 var btnRoll = document.querySelector('.btn-roll');
 var btnHold = document.querySelector('.btn-hold');
-var dekelImg = document.querySelector('.dekel');
+var dekelMiss = document.querySelector('.dekel-miss');
+var dekelWinR = document.querySelector('.dekel-wins-right');
+var dekelWinL = document.querySelector('.dekel-wins-left');
 var diceDOM = document.querySelector('.dice');
+var missDOM = document.getElementById("missAudio");
+var helpDOM = document.querySelector('.instructions');
 
 function playMiss() { 
-    document.getElementById("missAudio").play(); 
+    var nextMiss = Math.floor(Math.random() * 5) + 1;
+    missDOM.src = 'assets/dekelmiss-' + nextMiss + '.mp3';
+    missDOM.play(); 
 } 
+
 function playWin() { 
     document.getElementById("winAudio").play(); 
 } 
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-      }
-    }
-}
-// currentScore = 0;
-activePlayer = 0;
-gameOver = true;
-
-dekelImg.style.display = 'none';
-btnRoll.style.display = 'none';
-btnHold.style.display = 'none';
-//document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
-
-// get Element value example
-// var x = document.querySelector('#score-0').textContent;
-
-diceDOM.style.display = 'none';
 
 function SwitchActivePlayer() {
     document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
@@ -49,16 +35,34 @@ function SwitchActivePlayer() {
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
 }
 
+// currentScore = 0;
+activePlayer = 0;
+gameOver = true;
+
+dekelMiss.style.display = 'none';
+btnRoll.style.display = 'none';
+btnHold.style.display = 'none';
+dekelWinR.style.display = 'none';
+dekelWinL.style.display = 'none';
+
+//document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
+
+// get Element value example
+// var x = document.querySelector('#score-0').textContent;
+
+diceDOM.style.display = 'none';
+
 btnRoll.addEventListener('click', function() {
     var dice, currentScoreDOM;
     if (gameOver) {
         console.log("Please press NEW GAME")
-    } else {
-        dice = Math.floor(Math.random() * 6) + 1;
+    } else {        
         currentScoreDOM = document.querySelector('#current-'+ activePlayer );
 
         diceDOM.style.display = 'block';
         diceDOM.style.border = "none";
+
+        dice = (currentScoreDOM.textContent == 0 ? Math.floor(Math.random() * 5) + 2 : Math.floor(Math.random() * 6) + 1);
         diceDOM.src = 'assets/dice-' + dice + '.png';    
 
         if (dice != 1) {
@@ -69,8 +73,10 @@ btnRoll.addEventListener('click', function() {
             diceDOM.style.border = "thick solid black";
             playMiss();
             btnRoll.style.display = 'none';
-            dekelImg.style.display = 'block';
-            setTimeout(function(){btnRoll.style.display = 'block'; dekelImg.style.display = 'none';},3000);
+            dekelMiss.style.display = 'block';
+            setTimeout(function(){
+                btnRoll.style.display = 'block'; dekelMiss.style.display = 'none';
+            },4500);
         }
     };
 });
@@ -92,13 +98,14 @@ btnHold.addEventListener('click', function() {
         if (newScore >= 100) {
             btnRoll.style.display = 'none';
             btnHold.style.display = 'none';
+            helpDOM.style.display = 'block';
             gameOver = true;
-            console.log("Player " + activePlayer + 1 + " is the winner! Press NEW GAME for another");
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
             diceDOM.style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-            dekelImg.style.display = 'block';
+            dekelMiss.style.display = 'none';
+            activePlayer == 1 ? dekelWinR.style.display = 'block' : dekelWinL.style.display = 'block';
             playWin();
         } else {
             SwitchActivePlayer();
@@ -110,16 +117,23 @@ document.querySelector('.btn-new').addEventListener('click', function() {
     var currentScoreDOM;
     
     activePlayer = 0;
+    helpDOM.style.display = 'none';
+
     for (var i=0; i<2; i++) {
-        document.querySelector('#score-'+ i ).textContent = 0;
-        document.querySelector('#current-'+ i ).textContent = 0;
+        document.querySelector('#score-' + i).textContent = 0;
+        document.querySelector('#current-' + i).textContent = 0;
+        document.querySelector('.player-' + i + '-panel').classList.remove('winner');
+        document.querySelector('#name-' + i).textContent = 'Player ' + i;
     };
     currentScoreDOM = document.querySelector('#current-'+ activePlayer );
+    document.querySelector('.player-' + 0 + '-panel').classList.add('active');
 
     diceDOM.style.display = 'none';
 
     btnRoll.style.display = 'block';
     btnHold.style.display = 'block';
+    dekelWinL.style.display = 'none';
+    dekelWinR.style.display = 'none';
 
     gameOver = false;
 });

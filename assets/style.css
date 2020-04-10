@@ -45,7 +45,23 @@ body {
     padding: 100px;
 }
 
-
+.instructions {
+    position: absolute;
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #555;
+    background: none;
+    border: none;
+    font-family: Lato;
+    font-size: 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 400;
+    margin-top: 200px;
+    margin-bottom: 10px;
+}
 
 /**********************************************
 *** PLAYERS
@@ -70,8 +86,8 @@ body {
     margin-bottom: 130px;
 }
 
-.active { background-color: #f7f7f7; }
-.active .player-name { font-weight: 300; }
+.active { background-color: #f6fabca1; }
+.active .player-name { font-weight: 400; }
 
 .active .player-name::after {
     content: "\2022";
@@ -150,9 +166,29 @@ i {
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
 }
 
-.dekel {
+.dekel-miss {
     position: absolute;
     left: 50%;
+    top: 278px;
+    transform: translateX(-50%);
+    height: 100px;
+    box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+.dekel-wins-right {
+    display: block;
+    position: absolute;
+    left: 75%;
+    top: 278px;
+    transform: translateX(-50%);
+    height: 100px;
+    box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+.dekel-wins-left {
+    display: block;
+    position: absolute;
+    left: 25%;
     top: 278px;
     transform: translateX(-50%);
     height: 100px;
