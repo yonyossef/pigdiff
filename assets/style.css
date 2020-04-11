@@ -45,7 +45,7 @@ body {
     padding: 100px;
 }
 
-.instructions {
+.setup {
     position: absolute;
     width: 200px;
     left: 50%;
@@ -61,6 +61,22 @@ body {
     font-weight: 400;
     margin-top: 200px;
     margin-bottom: 10px;
+}
+
+input[type=number], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Lato;
+    font-size: 35px;
+}
+
+#win-input {
+    left: auto
 }
 
 /**********************************************
@@ -154,6 +170,7 @@ i {
 }
 
 .btn-new { top: 45px;}
+.btn-start { top: 340px;}
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
 

@@ -9,15 +9,21 @@ GAME RULES:
 
 */
 
-var activePlayer, gameOver;
+var activePlayer, gameOver, winScore;
 var btnRoll = document.querySelector('.btn-roll');
 var btnHold = document.querySelector('.btn-hold');
+var btnNew = document.querySelector('.btn-new');
+var btnStart = document.querySelector('.btn-start');
 var dekelMiss = document.querySelector('.dekel-miss');
 var dekelWinR = document.querySelector('.dekel-wins-right');
 var dekelWinL = document.querySelector('.dekel-wins-left');
 var diceDOM = document.querySelector('.dice');
 var missDOM = document.getElementById("missAudio");
 var helpDOM = document.querySelector('.instructions');
+var winScoreDOM = document.querySelector('.win-score');
+var noticeDOM = document.querySelector('.notice');
+var winningInputDOM = document.getElementById('win-input');
+var winScore = 100;
 
 function playMiss() { 
     var nextMiss = Math.floor(Math.random() * 5) + 1;
@@ -35,15 +41,19 @@ function SwitchActivePlayer() {
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
 }
 
-// currentScore = 0;
+
 activePlayer = 0;
 gameOver = true;
 
 dekelMiss.style.display = 'none';
 btnRoll.style.display = 'none';
 btnHold.style.display = 'none';
+btnStart.style.display = 'none';
 dekelWinR.style.display = 'none';
 dekelWinL.style.display = 'none';
+winScoreDOM.style.display = 'none';
+noticeDOM.style.display = 'none';
+helpDOM.style.display = 'block';
 
 //document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
 
@@ -63,7 +73,7 @@ btnRoll.addEventListener('click', function() {
         diceDOM.style.border = "none";
 
         dice = (currentScoreDOM.textContent == 0 ? Math.floor(Math.random() * 5) + 2 : Math.floor(Math.random() * 6) + 1);
-        diceDOM.src = 'assets/dice-' + dice + '.png';    
+        diceDOM.src = 'assets/dice-' + dice + '.png';
 
         if (dice != 1) {
             currentScoreDOM.textContent = Number(currentScoreDOM.textContent) + dice;
@@ -95,7 +105,7 @@ btnHold.addEventListener('click', function() {
 
         currentScoreDOM.textContent = 0;
 
-        if (newScore >= 100) {
+        if (newScore >= winScore) {
             btnRoll.style.display = 'none';
             btnHold.style.display = 'none';
             helpDOM.style.display = 'block';
@@ -114,28 +124,53 @@ btnHold.addEventListener('click', function() {
 });
 
 document.querySelector('.btn-new').addEventListener('click', function() {
-    var currentScoreDOM;
-    
-    activePlayer = 0;
+    btnNew.style.display = 'none';
+    noticeDOM.style.display = 'none';
     helpDOM.style.display = 'none';
-
-    for (var i=0; i<2; i++) {
-        document.querySelector('#score-' + i).textContent = 0;
-        document.querySelector('#current-' + i).textContent = 0;
-        document.querySelector('.player-' + i + '-panel').classList.remove('winner');
-        document.querySelector('#name-' + i).textContent = 'Player ' + i;
-    };
-    currentScoreDOM = document.querySelector('#current-'+ activePlayer );
-    document.querySelector('.player-' + 0 + '-panel').classList.add('active');
-
+    winScoreDOM.style.display = 'block';
+    winningInputDOM.style.display = 'block';
+    btnStart.style.display = 'block';
+    noticeDOM.style.display = 'none';
+    btnRoll.style.display = 'none';
+    btnHold.style.display = 'none';
     diceDOM.style.display = 'none';
+    winningInputDOM.value = 100;
+});
 
-    btnRoll.style.display = 'block';
-    btnHold.style.display = 'block';
-    dekelWinL.style.display = 'none';
-    dekelWinR.style.display = 'none';
+document.querySelector('.btn-start').addEventListener('click', function() {
+    
+    if (winningInputDOM.value < 6) {
+        noticeDOM.style.display = 'block';
+        btnStart.style.display = 'none';
+    } else {
+        activePlayer = 0;
+        helpDOM.style.display = 'none';
 
-    gameOver = false;
+        for (var i=0; i<2; i++) {
+            document.querySelector('#score-' + i).textContent = 0;
+            document.querySelector('#current-' + i).textContent = 0;
+            document.querySelector('.player-' + i + '-panel').classList.remove('winner');
+            document.querySelector('#name-' + i).textContent = 'Player ' + i;
+        };
+        document.querySelector('.player-' + 0 + '-panel').classList.add('active');
+
+        diceDOM.style.display = 'none';
+
+        btnRoll.style.display = 'block';
+        btnHold.style.display = 'block';
+        dekelWinL.style.display = 'none';
+        dekelWinR.style.display = 'none';
+
+        winningInputDOM.style.display = 'none';
+        btnStart.style.display = 'none';
+
+        winScore = winningInputDOM.value;
+        gameOver = false;
+    }
+    btnNew.style.display = 'block';
+    winScoreDOM.style.display = 'none';
+    
+
 });
 
 
